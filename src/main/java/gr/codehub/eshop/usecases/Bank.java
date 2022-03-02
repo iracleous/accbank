@@ -2,8 +2,11 @@ package gr.codehub.eshop.usecases;
 
 import gr.codehub.eshop.model.Account;
 import gr.codehub.eshop.model.Customer;
+import gr.codehub.eshop.repository.CustomerRepository;
+import gr.codehub.eshop.repository.CustomerRepositoryImpl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Bank {
@@ -58,6 +61,31 @@ public class Bank {
         System.out.println("Customer name "+ account.getCustomer().getName());
         System.out.println("Balance "+ account.getBalance().add( new BigDecimal("-20"))  );
         System.out.println("Date = "+dateStamp);
+
     }
+
+    public void manyTransactions(){
+        CustomerRepository customers = new CustomerRepositoryImpl();
+
+
+        customers.createCustomer(new Customer());
+        customers.createCustomer(new Customer(3,"Aris","Athina",
+                new Date(100,2,15),0.0,true));
+
+        for (Customer customer : customers.readCustomer()){
+            System.out.println(customer);
+        }
+
+        try {
+            customers.deleteCustomer(3);
+            System.out.println("The customer has been deleted");
+        }
+        catch(Exception e){
+            System.out.println("An error occured");
+        }
+    }
+
+
+
 
 }
