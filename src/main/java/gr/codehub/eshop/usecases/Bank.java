@@ -61,7 +61,6 @@ public class Bank {
         System.out.println("Customer name "+ account.getCustomer().getName());
         System.out.println("Balance "+ account.getBalance().add( new BigDecimal("-20"))  );
         System.out.println("Date = "+dateStamp);
-
     }
 
     public void manyTransactions(){
@@ -77,11 +76,11 @@ public class Bank {
         }
 
         try {
-            customers.deleteCustomer(3);
+            customers.deleteCustomer(6);
             System.out.println("The customer has been deleted");
         }
         catch(Exception e){
-            System.out.println("An error occured");
+            System.out.println(e.getMessage());
         }
     }
 

@@ -52,7 +52,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
     public boolean deleteCustomer(int id) throws CustomerException {
         Customer customer = readCustomer (id);
         if(customer == null)
-            throw new CustomerException();
+            throw new CustomerException("The customer does not exist");
         customers.remove(customer);
         return true;
     }
