@@ -9,4 +9,6 @@ public interface CustomerService {
     void login(Customer customer) throws CustomerException;
     void doTransaction(int customerId, int accountId, double amount)
         throws CustomerException, AccountException;
+
+    void fillData();
 }

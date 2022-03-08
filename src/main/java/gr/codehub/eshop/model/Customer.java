@@ -6,10 +6,9 @@ import java.util.Date;
 
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Customer {
-    private int id;
+
+public class Customer extends Entity{
+
     private String name;
     private String Address;
     private Date dateOfBirth;
