@@ -1,5 +1,7 @@
 package gr.codehub.eshop.usecases;
 
+import gr.codehub.eshop.exception.AccountException;
+import gr.codehub.eshop.exception.CustomerException;
 import gr.codehub.eshop.model.Account;
 import gr.codehub.eshop.model.Customer;
 import gr.codehub.eshop.repository.CustomerRepository;
@@ -63,8 +65,9 @@ public class Bank {
         System.out.println("Date = "+dateStamp);
     }
 
-    public void manyTransactions(){
+    public void manyTransactions() throws CustomerException {
         CustomerRepository customers = new CustomerRepositoryImpl();
+
 
 
         customers.createCustomer(new Customer());
@@ -75,14 +78,29 @@ public class Bank {
             System.out.println(customer);
         }
 
-        try {
+      //  try {
             customers.deleteCustomer(6);
             System.out.println("The customer has been deleted");
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+//        }
+//        catch(Exception e){
+//            System.out.println(e.getMessage());
+//        }
     }
+
+
+//    public void doTransaction(){
+//
+//        Customer customer = new Customer(3,"Aris","Athina",
+//                new Date(100,2,15),0.0,true);
+//        Account account = new Account();
+//
+//       doTransaction(int customerId, int accountId, double amount)
+//        throws CustomerException, AccountException
+//
+//
+//
+//
+//        }
 
 
 

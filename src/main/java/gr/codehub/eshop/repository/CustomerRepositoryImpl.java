@@ -32,11 +32,15 @@ public class CustomerRepositoryImpl implements CustomerRepository{
 
     @Override
     public List<Customer> readCustomer() {
+        /* deep copy of the list */
          List<Customer> returnCustomers = new ArrayList<>();
         for(Customer customer : customers) {
             returnCustomers.add(customer);
         }
         return returnCustomers;
+
+
+       //  return customers;
     }
 
     @Override
@@ -54,6 +58,7 @@ public class CustomerRepositoryImpl implements CustomerRepository{
         if(customer == null)
             throw new CustomerException("The customer does not exist");
         customers.remove(customer);
+
         return true;
     }
 }
