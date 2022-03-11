@@ -6,4 +6,8 @@ import lombok.Data;
 public class Entity {
     private int id;
     private String value;
+
+
+
+
 }
