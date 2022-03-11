@@ -12,7 +12,7 @@ public class DbUseCase {
     public void dbScenario(){
         Customer customer = new Customer();
         customer.setId(45);
-        customer.setName("Stavroula");
+        customer.setName("Giorgos");
         customer.setDateOfBirth(new Date(100, 2, 15));
         customer.setStatus(true);
 

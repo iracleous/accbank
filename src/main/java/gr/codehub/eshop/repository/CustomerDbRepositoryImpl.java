@@ -2,40 +2,45 @@ package gr.codehub.eshop.repository;
 
 import gr.codehub.eshop.model.Customer;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ConcurrentModificationException;
+import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class CustomerDbRepositoryImpl implements Repository<Customer>{
     @Override
     public boolean create(Customer t) {
 
-    String command = "  INSERT INTO [dbo].[customer] "
-      + "  ([name] ,[address]     ,[credit]   , [value]) "
-      + "   VALUES  ('"
-            + t.getName() + "','"
-            + t.getAddress() + "','"
-            + t.getCredit() + "','"
-            + t.getValue() + "');";
-        try {
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:sqlserver://localhost;databaseName=accBank;user=sa;password=passw0rd");
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(command);
-            conn.close();
+    String command = "INSERT INTO [dbo].[customer] "
+      + "  ([name] ,[address] ,[date], [credit], status, [value]) "
+      + "   VALUES  (?,?,?,?,?,?)";
+        try(Connection conn = DriverManager.getConnection(
+                "jdbc:sqlserver://localhost;databaseName=accBank;user=sa;password=passw0rd"))   {
 
-            System.out.println("The operations has been successfull");
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+            preparedStatement.setString(1, t.getName());
+            preparedStatement.setString(2, t.getAddress());
+
+            java.sql.Date d=new java.sql.Date(t.getDateOfBirth().getTime());
+
+            preparedStatement.setDate(3, d);
+            preparedStatement.setDouble(4, t.getCredit());
+            preparedStatement.setInt(5, t.isStatus()?1:0);
+            preparedStatement.setString(6, t.getValue());
+            int affectedRows = preparedStatement.executeUpdate();
+
+            System.out.println("The operations have been successfull. Affectedrows = "+ affectedRows);
+            return true;
         }
         catch(SQLException e){
-            System.out.println("The operations has NOT been successfull");
+            System.out.println("The operations have NOT been successfull");
             System.out.println(e);
-
+            return false;
         }
 
-        return false;
+
     }
 
     @Override
