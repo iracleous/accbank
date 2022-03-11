@@ -1,16 +1,14 @@
 package gr.codehub.eshop.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Customer {
-    private int id;
+@Setter
+@Getter
+
+public class Customer extends Entity{
+
     private String name;
     private String Address;
     private Date dateOfBirth;
