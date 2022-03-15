@@ -61,7 +61,8 @@ public class CustomerDbRepositoryImpl implements CustomerRepository {
                 Customer customer = new Customer();
                 customer.setId(customerResult.getInt("id") );
                 customer.setName(customerResult.getString("name"));
-
+                if (customerResult.getDate("date")!=null)
+                customer.setDateOfBirth(new java.util.Date(     customerResult.getDate("date").getTime()));
                 customer.setAddress(customerResult.getString("address"));
                 customer.setStatus(customerResult.getBoolean("status"));
                 return customer;
@@ -84,7 +85,8 @@ public class CustomerDbRepositoryImpl implements CustomerRepository {
                 Customer customer = new Customer();
                 customer.setId(customerResult.getInt("id") );
                 customer.setName(customerResult.getString("name"));
-
+                if (customerResult.getDate("date")!=null)
+                customer.setDateOfBirth(new java.util.Date(     customerResult.getDate("date").getTime()));
                 customer.setAddress(customerResult.getString("address"));
                 customer.setStatus(customerResult.getBoolean("status"));
                 customers.add(customer) ;
