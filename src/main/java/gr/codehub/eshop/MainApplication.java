@@ -11,8 +11,5 @@ public class MainApplication {
     public static void main(String[] args)   {
         DbUseCase dbCase =  new DbUseCase();
         dbCase.dbScenario();
-
-
-
     }
 }

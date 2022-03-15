@@ -1,23 +1,27 @@
 package gr.codehub.eshop.repository;
 
 import gr.codehub.eshop.model.Customer;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDbRepositoryImpl implements Repository<Customer>{
+
+@Repository
+public class CustomerDbRepositoryImpl implements CustomerRepository {
+
+
+    private final static String CONN_STRING = "jdbc:sqlserver://localhost;databaseName=accBank;user=sa;password=passw0rd";
+
+
     @Override
     public boolean create(Customer t) {
 
     String command = "INSERT INTO [dbo].[customer] "
       + "  ([name] ,[address] ,[date], [credit], status, [value]) "
-      + "   VALUES  (?,?,?,?,?,?)";
-        try(Connection conn = DriverManager.getConnection(
-                "jdbc:sqlserver://localhost;databaseName=accBank;user=sa;password=passw0rd"))   {
+      + "   VALUES  (?,?,?,?,?,?); SELECT SCOPE_IDENTITY(); ";
+        try(Connection conn = DriverManager.getConnection( CONN_STRING   ))   {
 
             PreparedStatement preparedStatement = conn.prepareStatement(command);
             preparedStatement.setString(1, t.getName());
@@ -29,9 +33,12 @@ public class CustomerDbRepositoryImpl implements Repository<Customer>{
             preparedStatement.setDouble(4, t.getCredit());
             preparedStatement.setInt(5, t.isStatus()?1:0);
             preparedStatement.setString(6, t.getValue());
-            int affectedRows = preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next())   {
+                int code = resultSet.getInt(1);
+                t.setId(code);
+            }
 
-            System.out.println("The operations have been successfull. Affectedrows = "+ affectedRows);
             return true;
         }
         catch(SQLException e){
@@ -45,21 +52,86 @@ public class CustomerDbRepositoryImpl implements Repository<Customer>{
 
     @Override
     public Customer read(int id) {
+        String command = "Select * from Customer where id = ?";
+        try(Connection conn = DriverManager.getConnection(CONN_STRING)) {
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+            preparedStatement.setInt(1, id);
+            ResultSet customerResult = preparedStatement.executeQuery();
+            while(customerResult.next())   {
+                Customer customer = new Customer();
+                customer.setId(customerResult.getInt("id") );
+                customer.setName(customerResult.getString("name"));
+
+                customer.setAddress(customerResult.getString("address"));
+                customer.setStatus(customerResult.getBoolean("status"));
+                return customer;
+            }
+        }
+        catch(Exception e){
+        }
         return null;
     }
 
     @Override
     public List<Customer> read() {
-        return null;
+
+        String command = "Select * from Customer  ";
+        List<Customer> customers = new ArrayList<>();
+        try(Connection conn = DriverManager.getConnection(CONN_STRING)) {
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+             ResultSet customerResult = preparedStatement.executeQuery();
+            while(customerResult.next())   {
+                Customer customer = new Customer();
+                customer.setId(customerResult.getInt("id") );
+                customer.setName(customerResult.getString("name"));
+
+                customer.setAddress(customerResult.getString("address"));
+                customer.setStatus(customerResult.getBoolean("status"));
+                customers.add(customer) ;
+            }
+        }
+        catch(Exception e){
+        }
+          return customers;
     }
 
     @Override
-    public boolean update(int id, String newValue) {
-        return false;
-    }
+    public Customer update(int id, String newValue) {
+        Customer customer = read(id);
+
+        String command = "update [dbo].[customer] set  [address] = ?  where id = ? ";
+        try(Connection conn = DriverManager.getConnection( CONN_STRING   )) {
+
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+            preparedStatement.setString(1, newValue);
+            preparedStatement.setInt(2, id);
+
+            int numberRows = preparedStatement.executeUpdate();
+            customer.setAddress(newValue);
+            return customer;
+        }
+        catch(Exception e){
+            return null;
+        }
+     }
 
     @Override
     public boolean delete(int id) throws Exception {
-        return false;
+
+
+        String command = "delete from  [dbo].[customer]    where id = ? ";
+        try(Connection conn = DriverManager.getConnection( CONN_STRING   )) {
+
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+
+            preparedStatement.setInt(1, id);
+
+            int numberRows = preparedStatement.executeUpdate();
+
+            return numberRows > 0;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 }
