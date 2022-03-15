@@ -4,7 +4,7 @@ import gr.codehub.eshop.exception.AccountException;
 import gr.codehub.eshop.exception.CustomerException;
 import gr.codehub.eshop.model.Account;
 import gr.codehub.eshop.model.Customer;
-import gr.codehub.eshop.repository.Repository;
+import gr.codehub.eshop.repository.IRepository;
 
 import gr.codehub.eshop.repository.RepositoryImpl;
 import gr.codehub.eshop.service.CustomerService;
@@ -66,7 +66,7 @@ public class Bank {
     }
 
     public void manyTransactions() throws CustomerException {
-        Repository<Customer> customers = new RepositoryImpl<>();
+        IRepository<Customer> customers = new RepositoryImpl<>();
 
 
         customers.create(new Customer());
@@ -106,24 +106,24 @@ public class Bank {
         account.setCustomer(customer1);
         account.setBalance( new BigDecimal("0.0"));
 
-        Repository<Customer> customerRepository = new RepositoryImpl<Customer>();
-        Repository accountRepository = new RepositoryImpl<Account>();
+        IRepository<Customer> customerRepository = new RepositoryImpl<Customer>();
+        IRepository accountRepository = new RepositoryImpl<Account>();
 
         customerRepository.create(customer1);
         accountRepository.create(account);
 
 
-        CustomerService customerService =
-                new CustomerServiceImpl(customerRepository, accountRepository);
+     //   CustomerService customerService =
+     //           new CustomerServiceImpl(customerRepository, accountRepository);
 
 
-        try {
-            customerService.doTransaction(45, 32, 100);
-        } catch (CustomerException e) {
-            System.out.println(e.getMessage());
-        } catch (AccountException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            customerService.doTransaction(45, 32, 100);
+//        } catch (CustomerException e) {
+//            System.out.println(e.getMessage());
+//        } catch (AccountException e) {
+//            e.printStackTrace();
+//        }
 
 
     }

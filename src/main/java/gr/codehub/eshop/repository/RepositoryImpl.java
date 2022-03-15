@@ -1,14 +1,12 @@
 package gr.codehub.eshop.repository;
 
-import gr.codehub.eshop.exception.CustomerException;
-import gr.codehub.eshop.model.Customer;
 import gr.codehub.eshop.model.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public  class RepositoryImpl<T extends Entity> implements Repository<T>{
+public  class RepositoryImpl<T extends Entity> implements IRepository<T> {
     private final List<T> tList = new ArrayList<>();
 
       @Override

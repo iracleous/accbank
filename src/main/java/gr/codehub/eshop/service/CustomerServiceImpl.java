@@ -4,26 +4,30 @@ import gr.codehub.eshop.exception.AccountException;
 import gr.codehub.eshop.exception.CustomerException;
 import gr.codehub.eshop.model.Account;
 import gr.codehub.eshop.model.Customer;
-import gr.codehub.eshop.repository.Repository;
+import gr.codehub.eshop.repository.AccountRepository;
+import gr.codehub.eshop.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-
+@Service
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService{
-    private Repository<Customer> customerRepository;
-    private Repository<Account> accountRepository;
+    private CustomerRepository customerRepository;
+    private AccountRepository accountRepository;
 
-     @Override
-    public void register(Customer customer) throws CustomerException {
 
+    @Override
+    public int register(Customer customer) throws CustomerException {
+        customerRepository.create(customer);
+        return 1;
     }
 
     @Override
-    public void login(Customer customer) throws CustomerException {
-
+    public Customer login(int customerId) throws CustomerException {
+        return null;
     }
 
     @Override

@@ -2,7 +2,7 @@ package gr.codehub.eshop.repository;
 
 import java.util.List;
 
-public interface Repository<E> {
+public interface IRepository<E> {
 
     //CRUD
     boolean create(E t);

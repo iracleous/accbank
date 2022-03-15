@@ -1,15 +1,14 @@
 package gr.codehub.eshop.repository;
 
 import gr.codehub.eshop.model.Customer;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
-public class CustomerDbRepositoryImpl implements Repository<Customer>{
+
+@Repository
+public class CustomerDbRepositoryImpl implements CustomerRepository {
     @Override
     public boolean create(Customer t) {
 

@@ -5,8 +5,8 @@ import gr.codehub.eshop.exception.CustomerException;
 import gr.codehub.eshop.model.Customer;
 
 public interface CustomerService {
-    void register(Customer customer) throws CustomerException;
-    void login(Customer customer) throws CustomerException;
+    int register(Customer customer) throws CustomerException;
+    Customer login(int customerId) throws CustomerException;
     void doTransaction(int customerId, int accountId, double amount)
         throws CustomerException, AccountException;
 
