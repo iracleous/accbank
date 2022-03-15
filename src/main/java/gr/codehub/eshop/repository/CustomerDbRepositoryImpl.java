@@ -4,6 +4,7 @@ import gr.codehub.eshop.model.Customer;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -73,16 +74,64 @@ public class CustomerDbRepositoryImpl implements CustomerRepository {
 
     @Override
     public List<Customer> read() {
-        return null;
+
+        String command = "Select * from Customer  ";
+        List<Customer> customers = new ArrayList<>();
+        try(Connection conn = DriverManager.getConnection(CONN_STRING)) {
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+             ResultSet customerResult = preparedStatement.executeQuery();
+            while(customerResult.next())   {
+                Customer customer = new Customer();
+                customer.setId(customerResult.getInt("id") );
+                customer.setName(customerResult.getString("name"));
+
+                customer.setAddress(customerResult.getString("address"));
+                customer.setStatus(customerResult.getBoolean("status"));
+                customers.add(customer) ;
+            }
+        }
+        catch(Exception e){
+        }
+          return customers;
     }
 
     @Override
-    public boolean update(int id, String newValue) {
-        return false;
-    }
+    public Customer update(int id, String newValue) {
+        Customer customer = read(id);
+
+        String command = "update [dbo].[customer] set  [address] = ?  where id = ? ";
+        try(Connection conn = DriverManager.getConnection( CONN_STRING   )) {
+
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+            preparedStatement.setString(1, newValue);
+            preparedStatement.setInt(2, id);
+
+            int numberRows = preparedStatement.executeUpdate();
+            customer.setAddress(newValue);
+            return customer;
+        }
+        catch(Exception e){
+            return null;
+        }
+     }
 
     @Override
     public boolean delete(int id) throws Exception {
-        return false;
+
+
+        String command = "delete from  [dbo].[customer]    where id = ? ";
+        try(Connection conn = DriverManager.getConnection( CONN_STRING   )) {
+
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+
+            preparedStatement.setInt(1, id);
+
+            int numberRows = preparedStatement.executeUpdate();
+
+            return numberRows > 0;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 }

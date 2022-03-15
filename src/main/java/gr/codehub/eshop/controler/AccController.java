@@ -5,6 +5,8 @@ import gr.codehub.eshop.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 public class AccController {
@@ -37,6 +39,22 @@ public class AccController {
         {
             return null;
         }
+    }
+
+    @RequestMapping (value={"/customer"}, method = RequestMethod.GET)
+    public List<Customer> customer(){
+        return customerService.customerList();
+    }
+
+    @RequestMapping (value={"/customer/{customerId}"}, method = RequestMethod.PUT)
+    public Customer update(@PathVariable("customerId") int customerId, @RequestBody Customer customer){
+        return customerService.update(customerId, customer);
+    }
+
+
+    @RequestMapping (value={"/customer/{customerId}"}, method = RequestMethod.DELETE)
+    public boolean delete(@PathVariable("customerId") int customerId){
+        return customerService.delete(customerId );
     }
 
 }

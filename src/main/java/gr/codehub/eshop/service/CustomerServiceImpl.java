@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -58,9 +59,33 @@ public class CustomerServiceImpl implements CustomerService{
         customer.setName("Dimitris");
         customer.setDateOfBirth(new Date(100,2,15));
         customer.setStatus(true);
-
         customerRepository.create(customer);
-
-
     }
+
+    @Override
+    public List<Customer> customerList() {
+        return customerRepository.read();
+    }
+
+    @Override
+    public Customer update(int customerId, Customer customer) {
+        if (customer == null)
+            return null;
+        if (customer.getAddress() == null)
+            return null;
+        return customerRepository.update(customerId,customer.getAddress());
+    }
+
+    @Override
+    public boolean delete(int customerId) {
+        try {
+            return customerRepository.delete(customerId);
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+
 }

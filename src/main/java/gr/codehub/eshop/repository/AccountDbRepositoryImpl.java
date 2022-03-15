@@ -24,8 +24,8 @@ public class AccountDbRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public boolean update(int id, String newValue) {
-        return false;
+    public Account update(int id, String newValue) {
+        return null;
     }
 
     @Override

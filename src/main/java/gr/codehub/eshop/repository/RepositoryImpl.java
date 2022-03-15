@@ -41,12 +41,12 @@ public  class RepositoryImpl<T extends Entity> implements IRepository<T> {
     }
 
     @Override
-    public boolean update(int id, String newValue) {
+    public T update(int id, String newValue) {
         T t = read (id);
         if(t == null)
-            return false;
+            return null;
         t.setValue(newValue);
-        return true;
+        return t;
     }
 
     @Override
