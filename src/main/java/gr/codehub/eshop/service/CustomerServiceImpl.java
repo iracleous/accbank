@@ -22,12 +22,12 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public int register(Customer customer) throws CustomerException {
         customerRepository.create(customer);
-        return 1;
+        return customer.getId();
     }
 
     @Override
     public Customer login(int customerId) throws CustomerException {
-        return null;
+        return customerRepository.read(customerId);
     }
 
     @Override

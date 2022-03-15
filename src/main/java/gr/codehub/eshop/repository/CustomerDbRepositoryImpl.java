@@ -9,14 +9,18 @@ import java.util.List;
 
 @Repository
 public class CustomerDbRepositoryImpl implements CustomerRepository {
+
+
+    private final static String CONN_STRING = "jdbc:sqlserver://localhost;databaseName=accBank;user=sa;password=passw0rd";
+
+
     @Override
     public boolean create(Customer t) {
 
     String command = "INSERT INTO [dbo].[customer] "
       + "  ([name] ,[address] ,[date], [credit], status, [value]) "
-      + "   VALUES  (?,?,?,?,?,?)";
-        try(Connection conn = DriverManager.getConnection(
-                "jdbc:sqlserver://localhost;databaseName=accBank;user=sa;password=passw0rd"))   {
+      + "   VALUES  (?,?,?,?,?,?); SELECT SCOPE_IDENTITY(); ";
+        try(Connection conn = DriverManager.getConnection( CONN_STRING   ))   {
 
             PreparedStatement preparedStatement = conn.prepareStatement(command);
             preparedStatement.setString(1, t.getName());
@@ -28,9 +32,12 @@ public class CustomerDbRepositoryImpl implements CustomerRepository {
             preparedStatement.setDouble(4, t.getCredit());
             preparedStatement.setInt(5, t.isStatus()?1:0);
             preparedStatement.setString(6, t.getValue());
-            int affectedRows = preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next())   {
+                int code = resultSet.getInt(1);
+                t.setId(code);
+            }
 
-            System.out.println("The operations have been successfull. Affectedrows = "+ affectedRows);
             return true;
         }
         catch(SQLException e){
@@ -44,6 +51,23 @@ public class CustomerDbRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer read(int id) {
+        String command = "Select * from Customer where id = ?";
+        try(Connection conn = DriverManager.getConnection(CONN_STRING)) {
+            PreparedStatement preparedStatement = conn.prepareStatement(command);
+            preparedStatement.setInt(1, id);
+            ResultSet customerResult = preparedStatement.executeQuery();
+            while(customerResult.next())   {
+                Customer customer = new Customer();
+                customer.setId(customerResult.getInt("id") );
+                customer.setName(customerResult.getString("name"));
+
+                customer.setAddress(customerResult.getString("address"));
+                customer.setStatus(customerResult.getBoolean("status"));
+                return customer;
+            }
+        }
+        catch(Exception e){
+        }
         return null;
     }
 
